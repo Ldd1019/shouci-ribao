@@ -13,9 +13,17 @@ IMPORTANT_TERMS = {
         "inflation",
         "central bank",
         "earnings",
+        "guidance",
         "regulation",
         "payment",
         "fintech",
+        "sec",
+        "market",
+        "crypto",
+        "bitcoin",
+        "ethereum",
+        "etf",
+        "stablecoin",
     ],
     "technology": [
         "ai",
@@ -26,9 +34,25 @@ IMPORTANT_TERMS = {
         "launch",
         "open source",
         "robot",
+        "robotics",
         "cloud",
         "security",
         "hardware",
+        "nvidia",
+        "amd",
+        "microsoft",
+        "google",
+        "meta",
+        "amazon",
+        "apple",
+        "tesla",
+        "broadcom",
+        "tsmc",
+        "data center",
+        "agent",
+        "battery",
+        "ev",
+        "renewable",
     ],
     "pet": [
         "pet food",
@@ -55,14 +79,14 @@ def score_article(article: Article) -> Article:
             score += 8
             matched.append(term)
 
-    if any(signal in text for signal in ["exclusive", "breaking", "raises", "raised", "launches"]):
+    if any(signal in text for signal in ["exclusive", "breaking", "raises", "raised", "launches", "files", "reports"]):
         score += 10
 
     article.importance_score = min(score, 100)
     article.reason_for_selection = (
         "匹配重要信号：" + ", ".join(matched[:5])
         if matched
-        else "来源可信且属于过去24小时内相关行业新闻"
+        else "来源可信且属于过去24小时内的相关行业新闻"
     )
     return article
 
