@@ -1,0 +1,39 @@
+topics:
+  finance:
+    name: 金融 / 投资 / 宏观经济 / 支付 / 金融科技
+    keywords:
+      - finance
+      - investing
+      - macro economy
+      - central bank
+      - inflation
+      - fintech
+      - payments
+      - crypto
+      - banking
+      - venture capital
+  technology:
+    name: 科技 / AI / 半导体 / 大模型 / 硬件 / 软件 / 互联网
+    keywords:
+      - artificial intelligence
+      - AI
+      - semiconductor
+      - chip
+      - large language model
+      - hardware
+      - software
+      - cloud
+      - internet
+      - robotics
+  pet:
+    name: 宠物行业 / 宠物食品 / 宠物智能硬件 / 宠物医疗 / 宠物消费品牌
+    keywords:
+      - pet industry
+      - pet food
+      - pet care
+      - pet health
+      - veterinary
+      - pet tech
+      - smart pet
+      - pet brand
+      - pet consumer

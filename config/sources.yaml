@@ -1,0 +1,72 @@
+sources:
+  - name: Google News Finance
+    type: rss
+    category: finance
+    url: "https://news.google.com/rss/search?q=finance%20OR%20investing%20OR%20macroeconomy%20OR%20fintech%20OR%20payments%20when%3A1d&hl=en-US&gl=US&ceid=US:en"
+    trust: 70
+
+  - name: Google News Reuters Finance
+    type: rss
+    category: finance
+    url: "https://news.google.com/rss/search?q=Reuters%20finance%20OR%20markets%20OR%20economy%20when%3A1d&hl=en-US&gl=US&ceid=US:en"
+    trust: 75
+
+  - name: CNBC Markets
+    type: rss
+    category: finance
+    url: "https://www.cnbc.com/id/15839069/device/rss/rss.html"
+    trust: 85
+
+  - name: CNBC Economy
+    type: rss
+    category: finance
+    url: "https://www.cnbc.com/id/20910258/device/rss/rss.html"
+    trust: 85
+
+  - name: TechCrunch
+    type: rss
+    category: technology
+    url: "https://techcrunch.com/feed/"
+    trust: 85
+
+  - name: The Verge
+    type: rss
+    category: technology
+    url: "https://www.theverge.com/rss/index.xml"
+    trust: 80
+
+  - name: MIT Technology Review
+    type: rss
+    category: technology
+    url: "https://www.technologyreview.com/feed/"
+    trust: 90
+
+  - name: Google News AI Tech
+    type: rss
+    category: technology
+    url: "https://news.google.com/rss/search?q=AI%20OR%20semiconductor%20OR%20large%20language%20model%20OR%20robotics%20when%3A1d&hl=en-US&gl=US&ceid=US:en"
+    trust: 70
+
+  - name: Petfood Industry
+    type: rss
+    category: pet
+    url: "https://www.petfoodindustry.com/rss"
+    trust: 85
+
+  - name: Pet Food Processing
+    type: rss
+    category: pet
+    url: "https://www.petfoodprocessing.net/rss"
+    trust: 80
+
+  - name: GlobalPETS
+    type: rss
+    category: pet
+    url: "https://globalpetindustry.com/feed"
+    trust: 80
+
+  - name: Google News Pet Industry
+    type: rss
+    category: pet
+    url: "https://news.google.com/rss/search?q=pet%20industry%20OR%20pet%20food%20OR%20pet%20tech%20OR%20veterinary%20when%3A1d&hl=en-US&gl=US&ceid=US:en"
+    trust: 70
