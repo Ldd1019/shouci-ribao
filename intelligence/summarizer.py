@@ -17,7 +17,7 @@ AI只允许做：中文翻译、内容总结、行业分类、趋势分析。
 
 
 def fallback(grouped: dict) -> str:
-    lines = ["1. 今日重点摘要", "", "未配置 OpenAI API，以下为真实新闻源抓取结果，未做 AI 深度总结。", ""]
+    lines = ["1. 今日重点摘要", "", "AI 总结服务暂时不可用，本期使用真实新闻源基础简报。", ""]
     section_names = {
         "finance": "2. 金融行业动态",
         "technology": "3. 科技行业动态",
@@ -35,7 +35,7 @@ def fallback(grouped: dict) -> str:
                 f"新闻标题：{item['title']}",
                 f"来源：{item['source_name']}",
                 f"发布时间：{item['published_at']}",
-                "简短中文总结：未启用 AI，总结暂缺。",
+                "简短中文总结：AI 总结服务暂时不可用，请查看原文。",
                 f"为什么值得关注：{item['reason_for_selection']}",
                 f"原文链接：{item['original_url']}",
                 "",
@@ -44,11 +44,11 @@ def fallback(grouped: dict) -> str:
     lines += [
         "5. 值得关注的优质企业",
         "",
-        "未启用 AI，暂不自动筛选。",
+        "AI 总结服务暂时不可用，暂不自动筛选。",
         "",
         "6. 趋势判断",
         "",
-        "未启用 AI，暂不自动判断。",
+        "AI 总结服务暂时不可用，暂不自动判断。",
         "",
         "7. 数据可信度说明",
         "",
@@ -87,18 +87,25 @@ def summarize(grouped: dict) -> str:
 {json.dumps(grouped, ensure_ascii=False, indent=2)}
 """
 
-    response = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={
-            "model": model,
-            "temperature": 0.1,
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
-        },
-        timeout=90,
-    )
-    response.raise_for_status()
-    return response.json()["choices"][0]["message"]["content"].strip()
+    try:
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": model,
+                "temperature": 0.1,
+                "messages": [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt},
+                ],
+            },
+            timeout=90,
+        )
+        response.raise_for_status()
+        return response.json()["choices"][0]["message"]["content"].strip()
+    except requests.RequestException as exc:
+        print(f"OpenAI summary unavailable, using fallback report: {exc}")
+        return fallback(grouped)
+    except (KeyError, IndexError, TypeError) as exc:
+        print(f"OpenAI response format unexpected, using fallback report: {exc}")
+        return fallback(grouped)
