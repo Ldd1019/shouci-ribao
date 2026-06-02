@@ -47,6 +47,36 @@ sources:
     url: "https://news.google.com/rss/search?q=AI%20OR%20semiconductor%20OR%20large%20language%20model%20OR%20robotics%20when%3A1d&hl=en-US&gl=US&ceid=US:en"
     trust: 70
 
+  - name: Google News Tech Capital Markets
+    type: rss
+    category: technology
+    url: "https://news.google.com/rss/search?q=Nvidia%20OR%20AMD%20OR%20Microsoft%20OR%20Google%20OR%20Meta%20OR%20Amazon%20OR%20Apple%20OR%20Tesla%20OR%20Broadcom%20OR%20TSMC%20when%3A1d&hl=en-US&gl=US&ceid=US:en"
+    trust: 72
+
+  - name: Google News Robotics New Energy
+    type: rss
+    category: technology
+    url: "https://news.google.com/rss/search?q=robotics%20OR%20humanoid%20robot%20OR%20renewable%20energy%20OR%20battery%20OR%20EV%20when%3A1d&hl=en-US&gl=US&ceid=US:en"
+    trust: 70
+
+  - name: VentureBeat AI
+    type: rss
+    category: technology
+    url: "https://venturebeat.com/category/ai/feed/"
+    trust: 78
+
+  - name: CoinDesk
+    type: rss
+    category: finance
+    url: "https://www.coindesk.com/arc/outboundfeeds/rss/"
+    trust: 82
+
+  - name: Cointelegraph
+    type: rss
+    category: finance
+    url: "https://cointelegraph.com/rss"
+    trust: 76
+
   - name: Petfood Industry
     type: rss
     category: pet
