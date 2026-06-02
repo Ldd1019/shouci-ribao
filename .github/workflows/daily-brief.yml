@@ -5,6 +5,11 @@ on:
     # 21:00 UTC = 05:00 Asia/Shanghai
     - cron: "0 21 * * *"
   workflow_dispatch:
+    inputs:
+      report_date:
+        description: "Optional report date, e.g. 2026-06-02"
+        required: false
+        default: ""
 
 jobs:
   send-brief:
@@ -35,5 +40,6 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           EMAIL_FROM_NAME: ${{ secrets.EMAIL_FROM_NAME }}
           LOOKBACK_HOURS: "24"
-          MAX_ITEMS_PER_CATEGORY: "5"
+          MAX_ITEMS_PER_CATEGORY: "10"
+          REPORT_DATE: ${{ github.event.inputs.report_date }}
         run: python main.py
