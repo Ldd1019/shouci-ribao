@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from datetime import datetime
 from typing import Any
 
@@ -27,7 +28,21 @@ TRACKED_SECTORS = ["AI", "半导体", "机器人", "新能源", "互联网", "�
 
 
 def article_dicts(articles: list[Article]) -> list[dict[str, Any]]:
-    return [article.to_dict() for article in articles]
+    result: list[dict[str, Any]] = []
+    for article in articles:
+        result.append(
+            {
+                "title": article.title,
+                "published_at": article.published_at,
+                "source_name": article.source_name,
+                "original_url": article.original_url,
+                "category": article.category,
+                "raw_summary": _short(article.raw_summary, 260),
+                "importance_score": article.importance_score,
+                "reason_for_selection": article.reason_for_selection,
+            }
+        )
+    return result
 
 
 def _stars(value: int) -> str:
@@ -222,6 +237,7 @@ def build_capital_market_report(articles: list[Article], report_date: str | None
     report_date = report_date or datetime.now().strftime("%Y-%m-%d")
     api_key = os.getenv("OPENAI_API_KEY", "").strip()
     model = os.getenv("OPENAI_MODEL", "gpt-4o-mini").strip()
+    max_articles = int(os.getenv("OPENAI_MAX_ARTICLES", "15"))
 
     if not api_key:
         return fallback_report(articles, report_date)
@@ -242,27 +258,39 @@ title, subtitle, date, core_conclusions, top_news, capital_flows, deep_dives,
 leader_views, mega_cap_tracking, ai_chain, crypto, opportunity_pool, risk_alerts, next_72h, sources。
 
 新闻 JSON：
-{json.dumps(article_dicts(articles[:35]), ensure_ascii=False, indent=2)}
+{json.dumps(article_dicts(articles[:max_articles]), ensure_ascii=False, separators=(",", ":"))}
 """
 
-    try:
-        response = requests.post(
-            "https://api.openai.com/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": model,
-                "temperature": 0.1,
-                "messages": [
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": prompt},
-                ],
-            },
-            timeout=120,
-        )
-        response.raise_for_status()
-        parsed = _extract_json(response.json()["choices"][0]["message"]["content"])
-        parsed.setdefault("date", report_date)
-        return parsed
-    except Exception as exc:
-        print(f"Capital market report fallback used: {exc}")
-        return fallback_report(articles, report_date)
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            response = requests.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                json={
+                    "model": model,
+                    "temperature": 0.1,
+                    "max_tokens": 3500,
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": prompt},
+                    ],
+                },
+                timeout=120,
+            )
+            response.raise_for_status()
+            parsed = _extract_json(response.json()["choices"][0]["message"]["content"])
+            parsed.setdefault("date", report_date)
+            return parsed
+        except requests.HTTPError as exc:
+            last_error = exc
+            status = exc.response.status_code if exc.response is not None else None
+            if status != 429 or attempt == 2:
+                break
+            time.sleep(5 * (attempt + 1))
+        except Exception as exc:
+            last_error = exc
+            break
+
+    print(f"Capital market report fallback used: {last_error}")
+    return fallback_report(articles, report_date)
