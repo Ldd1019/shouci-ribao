@@ -41,5 +41,6 @@ jobs:
           EMAIL_FROM_NAME: ${{ secrets.EMAIL_FROM_NAME }}
           LOOKBACK_HOURS: "24"
           MAX_ITEMS_PER_CATEGORY: "10"
+          OPENAI_MAX_ARTICLES: "15"
           REPORT_DATE: ${{ github.event.inputs.report_date }}
         run: python main.py
