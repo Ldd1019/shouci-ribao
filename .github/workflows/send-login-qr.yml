@@ -17,8 +17,8 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          LOGIN_QR_PATH: "D:\Codex新\Codex周报\outputs\2026-06-04\doubao-login-needed.png"
+          LOGIN_QR_PATH: 'D:\Codex新\Codex周报\outputs\2026-06-04\doubao-login-needed.png'
         run: |
           $ErrorActionPreference = "Stop"
-          Set-Location "D:\Codex新\Codex周报"
-          & "C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" "D:\Codex新\Codex周报\scripts\send_login_qr.py"
+          Set-Location 'D:\Codex新\Codex周报'
+          & 'C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' 'D:\Codex新\Codex周报\scripts\send_login_qr.py'
