@@ -1,0 +1,33 @@
+name: Daily Doubao PPT Email
+
+on:
+  schedule:
+    # 21:40 UTC = 05:40 Asia/Shanghai, after PPT generation
+    - cron: "40 21 * * *"
+  workflow_dispatch:
+    inputs:
+      report_date:
+        description: "Optional report date, e.g. 2026-06-04"
+        required: false
+        default: ""
+
+jobs:
+  send-email:
+    runs-on: [self-hosted, windows, doubao-ppt]
+    timeout-minutes: 20
+    steps:
+      - name: Send existing Doubao PPT
+        shell: powershell
+        env:
+          EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_FROM_NAME: ${{ secrets.EMAIL_FROM_NAME }}
+          REPORT_DATE: ${{ github.event.inputs.report_date }}
+        run: |
+          $ErrorActionPreference = "Stop"
+          Set-Location "D:\Codex新\Codex周报"
+          powershell -ExecutionPolicy Bypass -File "D:\Codex新\Codex周报\scripts\send_doubao_ppt.ps1"
