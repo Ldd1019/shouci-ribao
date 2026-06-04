@@ -1,4 +1,4 @@
-name: Daily Industry Brief
+name: Daily Doubao PPT Mail
 
 on:
   schedule:
@@ -7,40 +7,27 @@ on:
   workflow_dispatch:
     inputs:
       report_date:
-        description: "Optional report date, e.g. 2026-06-02"
+        description: "Optional report date, e.g. 2026-06-04"
         required: false
         default: ""
 
 jobs:
-  send-brief:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: .
+  send-ppt:
+    runs-on: [self-hosted, windows, doubao-ppt]
+    timeout-minutes: 90
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Send daily brief
+      - name: Run local Doubao PPT automation
+        shell: powershell
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
           EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           EMAIL_FROM_NAME: ${{ secrets.EMAIL_FROM_NAME }}
-          LOOKBACK_HOURS: "24"
-          MAX_ITEMS_PER_CATEGORY: "10"
-          OPENAI_MAX_ARTICLES: "15"
           REPORT_DATE: ${{ github.event.inputs.report_date }}
-        run: python main.py
+          DOUBAO_LOGIN_WAIT_MS: "600000"
+          DOUBAO_MAX_REVISION_ATTEMPTS: "3"
+        run: |
+          $ErrorActionPreference = "Stop"
+          Set-Location "D:\Codex新\Codex周报"
+          powershell -ExecutionPolicy Bypass -File "D:\Codex新\Codex周报\scripts\run_doubao_daily.ps1"
