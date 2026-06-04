@@ -1,0 +1,24 @@
+name: Send Test Email
+
+on:
+  workflow_dispatch:
+
+jobs:
+  send-test-email:
+    runs-on: [self-hosted, windows, doubao-ppt]
+    timeout-minutes: 10
+    steps:
+      - name: Send hello test email
+        shell: cmd
+        env:
+          EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_TO: 1432047156@qq.com
+        run: >
+          powershell -NoProfile -ExecutionPolicy Bypass -Command
+          "$ErrorActionPreference='Stop'; Set-Location 'D:\Codex新\Codex周报';
+          & 'C:\Users\Administrator\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
+          'D:\Codex新\Codex周报\scripts\send_test_email.py'"
