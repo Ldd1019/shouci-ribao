@@ -1,4 +1,4 @@
-name: Daily Doubao PPT Mail
+name: Daily Doubao PPT Generate
 
 on:
   schedule:
@@ -12,22 +12,17 @@ on:
         default: ""
 
 jobs:
-  send-ppt:
+  generate-ppt:
     runs-on: [self-hosted, windows, doubao-ppt]
     timeout-minutes: 90
     steps:
-      - name: Run local Doubao PPT automation
+      - name: Generate Doubao PPT locally
         shell: powershell
         env:
-          EMAIL_PROVIDER: ${{ secrets.EMAIL_PROVIDER }}
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          EMAIL_FROM_NAME: ${{ secrets.EMAIL_FROM_NAME }}
           REPORT_DATE: ${{ github.event.inputs.report_date }}
           DOUBAO_LOGIN_WAIT_MS: "600000"
           DOUBAO_MAX_REVISION_ATTEMPTS: "3"
         run: |
           $ErrorActionPreference = "Stop"
           Set-Location "D:\Codex新\Codex周报"
-          powershell -ExecutionPolicy Bypass -File "D:\Codex新\Codex周报\scripts\run_doubao_daily.ps1"
+          powershell -ExecutionPolicy Bypass -File "D:\Codex新\Codex周报\scripts\generate_doubao_ppt.ps1"
