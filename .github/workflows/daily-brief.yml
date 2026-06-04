@@ -22,6 +22,7 @@ jobs:
           REPORT_DATE: ${{ github.event.inputs.report_date }}
           DOUBAO_LOGIN_WAIT_MS: "600000"
           DOUBAO_MAX_REVISION_ATTEMPTS: "3"
+          DOUBAO_USE_DEFAULT_CHROME_PROFILE: "1"
         run: |
           $ErrorActionPreference = "Stop"
           Set-Location "D:\Codex新\Codex周报"
